@@ -11,6 +11,7 @@ class PostList extends Component {
       })
     }
   }
+
   state = {
     sortBy: 'score-high-to-low',
     postsIds: this.props.postsIds,
@@ -44,6 +45,7 @@ class PostList extends Component {
   }
   render() {
     let loadProps = true
+
     return (
       <div>
         <div className='menu-sort-post'>

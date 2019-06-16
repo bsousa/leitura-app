@@ -38,7 +38,7 @@ class Post extends Component {
     }
 
     return (
-      <Link className='post-link' to={`/post/${id}`}>
+      <Link className='post-link' to={`/${post.category}/${id}`}>
         {this.state.editMode && (
           <PostForm />
         )}

@@ -3,10 +3,11 @@ import { connect } from 'react-redux'
 import { handleInitialData } from '../actions/shared'
 import LoadingBar from 'react-redux-loading'
 import PostForm from './PostForm'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route , Switch} from 'react-router-dom'
 import PostDetails from './PostDetails'
-import PostList from './PostList';
-import Menu from './Menu';
+import PostList from './PostList'
+import Menu from './Menu'
+import PageNotFound from './PageNotFound'
 
 class App extends Component {
   componentDidMount() {
@@ -22,11 +23,15 @@ class App extends Component {
             {this.props.loading === true
               ? null
               : <div>
-                <Route path='/' exact component={PostList} />
-                <Route path='/posts/:category' exact component={PostList} />
-                <Route exact path='/post/:id' component={PostDetails} />
-                <Route exact path='/post/edit/:id' component={PostForm} />
-                <Route exact path='/newPost' component={PostForm} />
+                <Switch>
+                  <Route exact path='/' component={PostList} />
+                  <Route exact path='/newPost/' component={PostForm} />
+                  <Route exact path='/PageNotFound/' component={PageNotFound} />
+                  <Route exact path='/:category' component={PostList} />
+                  <Route exact path='/:category/:id' component={PostDetails} />
+                  <Route exact path='/post/edit/:id' component={PostForm} />
+                  <Route component={PageNotFound} />
+                </Switch>
               </div>
             }
           </div>

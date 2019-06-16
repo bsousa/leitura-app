@@ -3,6 +3,7 @@ import CommentList from './CommentList';
 import CommentForm from './CommentForm';
 import { connect } from 'react-redux'
 import Post from './Post'
+import { Redirect } from 'react-router-dom'
 
 class PostDetails extends Component {
 
@@ -17,6 +18,16 @@ class PostDetails extends Component {
   }
   render() {
     const { post, id } = this.props
+    console.log('posts: ', this.props.posts === null)
+    console.log('post: ', this.props.post === undefined)
+    if (Object.keys(this.props.posts).length > 0) {
+      console.log('A')
+      if (this.props.post === undefined) {
+        console.log('B')
+        return <Redirect to='/PageNotFound' />
+      }
+    }
+
     return (
       <div className='post-list'>
         <div className='menu-sort'>
@@ -50,6 +61,7 @@ function mapStateToProps({ posts }, props) {
   return {
     id: id,
     post,
+    posts
   }
 }
 export default connect(mapStateToProps)(PostDetails)

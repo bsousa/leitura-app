@@ -2,7 +2,10 @@ import React from 'react'
 
 function PageNotFound(){
   return (
-    <div>Não foi dessa vez :(</div>
+    <div className='post-list'>
+      <h1>Não foi dessa vez :(</h1>
+      <p>A pagina que você tentou acessar não existe mais. </p>
+    </div>
   )
 }
 export default PageNotFound

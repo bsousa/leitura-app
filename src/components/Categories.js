@@ -8,7 +8,7 @@ class Categories extends Component {
     return (
       <div>
         {Object.keys(categories).map((category) => (
-           <span><Link to={`/posts/${categories[category].name}`} className='category-menu'>{categories[category].name}</Link></span>
+           <span><Link to={`/${categories[category].name}`} className='category-menu'>{categories[category].name}</Link></span>
           ))}
       </div>
     )
