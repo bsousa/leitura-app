@@ -1,25 +1,82 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { handleUpdateScore, handleDeletePost } from '../actions/posts'
+import { formatDate } from '../helpers'
+import { Link, withRouter, Redirect } from 'react-router-dom'
+import { handleLoadComments } from '../actions/comments'
+import PostForm from './PostForm';
 
-function Post(props) {
-  return (
-    <div>
-      <h1>A incogniscibilidade pós-moderna do Ser.</h1>
-      <p>Caros amigos, a infinita diversidade da realidade única afeta positivamente a correta previsão da interpretação de fatos socio-linguisticos. O espírito dionisíaco da música e poesia nos ensinou que a complexidade dos estudos efetuados cumpre um papel essencial na formulação da fundamentação metafísica das representações. Assim mesmo, a estrutura atual da ideação semântica exige a precisão e a definição do sistema de conhecimento geral. No entanto, não podemos esquecer que o novo modelo estruturalista aqui preconizado é condição suficiente das posturas dos filósofos divergentes com relação às atribuições conceituais. Do mesmo modo, a indeterminação contínua de distintas formas de fenômeno representa a expressão imediata das novas teorias propostas.</p>
-      <div className='post'>
-        <div className='post-info'>
-          Posted by Start Bootstrap on September 24, 2019
-        </div>
-        <div className='vote-score'>
-          1000
-        </div>
-      </div>
-      <hr />
-    </div>
-  )
+class Post extends Component {
+  state = {
+    editMode: false,
+  }
+  handleVote = (e) => {
+    e.preventDefault()
+
+    const { dispatch, post, id } = this.props
+    const vote = e.target.id
+    dispatch(handleUpdateScore({
+      id: id,
+      post: post,
+      option: vote
+    }))
+  }
+  handleDeletePost = (e) => {
+    e.preventDefault()
+    const { dispatch, post, id } = this.props
+
+    dispatch(handleDeletePost({
+      id: id,
+      post,
+    }))
+  }
+  render() {
+    const { post, id, dispatch } = this.props
+
+    if (post !== undefined) {
+      dispatch(handleLoadComments(post.id))
+    }
+
+    return (
+      <Link className='post-link' to={`/post/${id}`}>
+        {this.state.editMode && (
+          <PostForm />
+        )}
+        {post && (<div>
+          <h1>{post.title}</h1>
+          <p>{post.body}</p>
+          <div className='post'>
+            <div className='post-info'>
+              {`Posted by ${post.author} on ${formatDate(post.timestamp)} `}
+            </div>
+
+            <div className='comment-content'>
+              <div className='post-comment'>{post.commentCount}</div>
+              <div className='post-comment-icons'>
+                <img alt='Comments' className='control-image' width='20px' title='Comments' src={require('../icons/comment.png')} />
+              </div>
+              <div className='post-comment'>{post.voteScore}</div>
+              <div className='post-comment-icons'>
+                <img alt='Vote Up' id='upVote' className='control-image' onClick={this.handleVote} width='20px' title='Like' src={require('../icons/like.png')} />
+                <img alt='Vote Down' id='downVote' className='control-image' onClick={this.handleVote} width='20px' title='Deslike' src={require('../icons/deslike.png')} />
+                <Link className='post-link' to={`/post/edit/${id}`}><img alt='Edit' className='control-image' width='20px' title='Edit' src={require('../icons/edit.png')} /></Link>
+                <img alt='Delete' className='control-image' width='20px' onClick={this.handleDeletePost} title='Delete' src={require('../icons/delete.png')} />
+              </div>
+            </div>
+          </div>
+          <hr />
+        </div>)}
+      </Link>
+    )
+  }
 }
 
-Post.propTypes = {
-
+function mapStateToProps({ posts }, { id }) {
+  const post = posts[id]
+  return {
+    post: post,
+    id: id
+  }
 }
-export default Post
+
+export default withRouter(connect(mapStateToProps)(Post))

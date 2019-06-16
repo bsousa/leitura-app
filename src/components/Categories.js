@@ -1,17 +1,24 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 
-function Categories (props) {
-  return (
-    <div>
-        <span><a href=''>Mundo</a></span>
-        <span><a href=''>Esportes</a></span>
-        <span><a href=''>Politica</a></span>
-    </div>
+class Categories extends Component {
+  render() {
+    const { categories } = this.props
+    return (
+      <div>
+        {Object.keys(categories).map((category) => (
+           <span><Link to={`/posts/${categories[category].name}`} className='category-menu'>{categories[category].name}</Link></span>
+          ))}
+      </div>
     )
+  }
 }
 
-Categories.propTypes = {
-
+function mapStateToProps({ categories }) {
+  return {
+    categories
+  }
 }
-export default Categories
+
+export default connect(mapStateToProps)(Categories)

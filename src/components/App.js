@@ -1,35 +1,44 @@
-import React from 'react'
-import '../App.css'
-import Categories from './Categories.js'
-import PostList from './PostList.js'
+import React, { Component, Fragment } from 'react'
+import { connect } from 'react-redux'
+import { handleInitialData } from '../actions/shared'
+import LoadingBar from 'react-redux-loading'
+import PostForm from './PostForm'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import PostDetails from './PostDetails'
+import PostList from './PostList';
+import Menu from './Menu';
 
-function App() {
-  return (
-    <div className="App">
-        <div className='app-title'>Lecture App</div>
-
-      <div className='menu'>
-          <div className='menu-content'>
-              <div className='menu-button'>
-                <button>New Post</button>
+class App extends Component {
+  componentDidMount() {
+    this.props.dispatch(handleInitialData())
+  }
+  render() {
+    return (
+      <Router>
+        <Fragment>
+          <LoadingBar />
+          <div className="App">
+            <Menu />
+            {this.props.loading === true
+              ? null
+              : <div>
+                <Route path='/' exact component={PostList} />
+                <Route path='/posts/:category' exact component={PostList} />
+                <Route exact path='/post/:id' component={PostDetails} />
+                <Route exact path='/post/edit/:id' component={PostForm} />
+                <Route exact path='/newPost' component={PostForm} />
               </div>
-              <div className='menu-categories'>
-                <Categories />  
-              </div>
-              <div className='menu-sort'>
-                <span className='menu-title'>Sort by: </span>
-                <select className='appearance-select'>
-                  <option>Score, low to high</option>
-                  <option>Score, high to low</option>
-                  <option>Date, old to new</option>
-                  <option>Date, new to old</option>
-                </select>                
-              </div>              
+            }
           </div>
-      </div>
-      <PostList />
-    </div>
-  );
+        </Fragment>
+      </Router>
+    )
+  }
 }
 
-export default App
+function mapStateToProps({ posts }) {
+  return {
+    loading: posts === null
+  }
+}
+export default connect(mapStateToProps)(App)
