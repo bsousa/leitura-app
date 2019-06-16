@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { handleUpdateScore, handleDeletePost } from '../actions/posts'
 import { formatDate } from '../helpers'
-import { Link, withRouter, Redirect } from 'react-router-dom'
+import { Link, } from 'react-router-dom'
 import { handleLoadComments } from '../actions/comments'
 import PostForm from './PostForm';
 
@@ -49,7 +49,6 @@ class Post extends Component {
             <div className='post-info'>
               {`Posted by ${post.author} on ${formatDate(post.timestamp)} `}
             </div>
-
             <div className='comment-content'>
               <div className='post-comment'>{post.commentCount}</div>
               <div className='post-comment-icons'>
@@ -79,4 +78,4 @@ function mapStateToProps({ posts }, { id }) {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(Post))
+export default connect(mapStateToProps)(Post)
