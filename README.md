@@ -1,4 +1,4 @@
-# My Reads
+# Leitura
 Aplicação de leitura do curso de React da Udacity
 
 ### Prerequisites
